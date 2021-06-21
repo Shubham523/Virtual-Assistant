@@ -9,7 +9,7 @@ import wikipedia #pip install wikipedia
 import webbrowser
 import os
 import smtplib
-import google
+import googlesearch
 from googlesearch import search
 
 class VirtualAssistant(Frame):
@@ -74,7 +74,7 @@ class VirtualAssistant(Frame):
                 to = receiver 
                 print("To : ",to)
                 self.sendEmail(to, content)
-                self.speakToUser("Email has been sent to {receiver} ")
+                self.speakToUser(f"Email has been sent to {receiver} ")
                 break
             except Exception as e:
                 print(e)
@@ -83,20 +83,31 @@ class VirtualAssistant(Frame):
         # Logic for executing tasks based on query
        
 
-        elif 'open youtube' in query:
-            self.speakToUser("Opening youtube ")          
-            webbrowser.open("youtube.com")
+        elif 'open youtube website' or 'Open Youtube Website' in query:
+            optimizeQueryList = query[4:len(query) - 7]
+            print(optimizeQueryList)
+            getUrls = []
+            speech = "Opening " + query[4:len(query)]
+            self.speakToUser(speech) 
+
+            optimizeQueryList += ".com"   
+            finalQuery = optimizeQueryList.strip()   
+            finalQuery = finalQuery.lower() 
+            getResults= search(finalQuery, tld='com', lang='en', num=10, start=0, stop=None, pause=2.0) 
+            urls = list(getResults)
+           
+            webbrowser.open(urls[0])
             break
 
-        elif 'open google' in query:   
-            self.speakToUser("Opening Google")       
-            webbrowser.open("google.com")
-            break
+        #elif 'open google' in query:   
+            #self.speakToUser("Opening Google")       
+            #webbrowser.open("google.com")
+            #break
 
-        elif 'open stack overflow' or 'stack overflow' in query:
-            self.speakToUser("Opening Stack Overflow")
-            webbrowser.open("stackoverflow.com")  
-            break 
+        #elif 'open stack overflow' or 'stack overflow' in query:
+            #self.speakToUser("Opening Stack Overflow")
+            #webbrowser.open("stackoverflow.com")  
+            #break 
 
         elif 'play music' in query:
             music_dir = 'D:\\Non Critical\\songs\\Favorite Songs2'
@@ -157,10 +168,10 @@ class VirtualAssistant(Frame):
         self.speakToUser("I am Sam . Please tell me how may I help you")  
 
 homeScreen = Tk()
-homeScreen.geometry("1000x700")
+homeScreen.geometry("900x600")
 homeScreen.title("Sam - Your Virtual Assistant")
 
 v1 = VirtualAssistant(homeScreen)
-time.sleep(2)
+time.sleep(5)
 v1.wishUser()
 homeScreen.mainloop()
